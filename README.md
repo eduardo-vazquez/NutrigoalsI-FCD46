@@ -1,135 +1,207 @@
-# IFCD46-nutrigoals
+IFCD46 – NutriGoals (Documentación Técnica)
+1. Objetivo del Proyecto
 
-## OBJETIVO DEL PROYECTO 
-NutriGoal es una web para el seguimiento de habitos alimenticios y actividades fisicas.
+NutriGoals es una aplicación web para el seguimiento de hábitos alimenticios y actividad física. Permite registrar comidas y ejercicios, calcular calorías y macronutrientes automáticamente, consultar recetas y visualizar el progreso diario del usuario mediante gráficos interactivos.
 
-### DISE�OGENEAL Y ARQUITECTURA:
+El proyecto está desarrollado en ASP.NET Web Forms con C#, con base de datos SQL y consumo de APIs externas para alimentos y recetas.
 
-- [ ] Frontend: HTML, CSS.
-- [ ] Backend: .Net (C#).
-- [ ] Base de Datos: SQL.
-- [ ] Integracion con API de alimentos: Open Food Facts API.
-- [ ] Autenticacion mediante OAuth 2.0 y OpenID Connect (OIDC)
+2. Arquitectura del Sistema
+2.1 Tecnologías
 
-### FUNCIONALIDADES:
-- [ ] El usuario puede crear una cuenta e iniciar sesion. 
-- [ ] Poder cargar las necesidades caloricas y de macronutrientes diarias segun los objetivos del usuario.
-- [ ] El usuario podra definir sus necesidades nutricionales en la aplicacion, utilizando formulas estandarizadas, segun su edad, sexo, peso, altura y nivel de actividad fisica.
-- [ ] El usuario podra registrar sus comidas diarias, especificando los alimentos consumidos y sus cantidades. Esto se podra hacer mediante una base de datos de alimentos integrada en la aplicacion (https://world.openfoodfacts.org/data).
-- [ ] El sistema calculara automaticamente las calorias y macronutrientes consumidos en cada comida y los sumara al total diario del usuario.
-- [ ] Se podra visualizar como van las calorias y macronutrientes consumidos a traves de circulos de progreso.
-- [ ] El usuario podra registrar sus actividades fisicas diarias, especificando el tipo de actividad, duracion e intensidad.
-- [ ] El sistema calculara automaticamente las calorias quemadas en cada actividad fisica y las restara del total diario del usuario.
-- [ ] Todo esto se ira actualizando a tiempo real.
-- [ ] El usuario podra ver un historial de sus registros diarios, semanales y mensuales, para analizar su progreso a lo largo del tiempo.
-- [ ] El usario podra consultar recetas a partir de ingredientes que tenga en casa y cada receta mostrara informacion nutricional, para incorporar a su plan alimenticio.
-- [ ]  Visualizar lo comido cuanto significa en actividad fisica. Eso se podria elegir la quivalencia con el tipo de actividad. <- INTERESANTE
-- [ ]  Los eccesos en cal diario enviar alarma.
+Frontend: HTML, CSS, Bootstrap, Font Awesome, ASP.NET Web Forms.
 
-### MOCKUPS
+Backend: .NET (C#), Code-behind por página (.aspx.cs).
 
-[FIGMA] (https://www.figma.com/design/9MciY2F8rPhQxvWKaUKYMR/NutriGoals?node-id=0-1&m=dev&t=Rs223yUgBAosNcQZ-1)
+Base de datos: SQL Server.
 
-### TAREAS PRINCIPALES (divididas en sprints):
+APIs externas: Open Food Facts, FoodData Central (USDA), CalorieNinjas, Recipe API.
 
-[TRELLO] (https://trello.com/invite/b/68f649e434c65abca57be625/ATTI4f0930a755cd5857f273b4a3e41c29b83AF2183C/)
+Autenticación: OAuth 2.0 / OpenID Connect.
 
-#### SPRINT 1:
-- [ ] Configuracion del entorno de desarrollo.
-- [ ] Dise�o de la base de datos.
-- [ ] Implementacion del sistema de autenticacion y gestion de usuarios.
-- [ ] Configuraci�n del repositorio, control de versiones y documentaci�n inicial
+Gestión de scripts y bundles: ScriptManager y WebOpt bundling.
 
-#### SPRINT 2:
-- [ ] Implementacion del registro y seguimiento de comidas.
-- [ ] Coneccion con la base de datos de alimentos.
-- [ ] Implementacion del calculo automatico de calorias y macronutrientes.
-- [ ] Pruebas unitarias y de integracion para las funcionalidades implementadas.
+2.2 Estructura general
 
-#### SPRINT 3:
-- [ ] Implementacion del registro y seguimiento de actividades fisicas.
-- [ ] Implementacion del calculo automatico de calorias quemadas.
-- [ ] Pruebas unitarias y de integracion para las funcionalidades implementadas.
+MasterPage (Site.Master): define navbar, footer con anillos de progreso y menú de acciones rápidas.
 
+ContentPages: cada página concreta extiende MasterPage mediante ContentPlaceHolderID="MainContent".
 
-#### SPRINT 4:
-- [ ] Implementacion del historial de registros diarios, semanales y mensuales.
-- [ ] Desarrollo de la interfaz de usuario para la visualizacion del historial.
-- [ ] Pruebas unitarias y de integracion para las funcionalidades implementadas.
+Módulos principales: registro de alimentos, registro de actividades, consulta de recetas, historial, perfil de usuario.
 
-#### SPRINT 5:
-- [ ] Implementacion de la funcionalidad de recetas basadas en ingredientes disponibles.
-- [ ] Integracion de la informacion nutricional en las recetas.
-- [ ] Desarrollo de la interfaz de usuario para la visualizacion de recetas.
+Control de estados: ViewState y PostBack para formularios, Repeaters para listados dinámicos.
 
-#### SPRINT 6:
-- [ ] Desarrollo de la interfaz de usuario para todas las funcionalidades.
-- [ ] Pruebas de usabilidad y ajustes en la interfaz de usuario.
+3. Páginas y Componentes
+3.1 Dashboard / Home
 
-### DISE�O DE BASE DE DATOS
+Visualiza progreso diario mediante SVG de anillos (calorías, proteínas, carbohidratos, grasas).
 
-TABLA DE USUARIOS:
-- ID_USUARIO
-- NOMBRE_USUARIO 
-- CONTRASENA
+Botón central: acceso rápido a Home.
 
-TABLA USARIOS_DETALLES:
-- ID_USUARIO
-- NOMBRE
-- APELLIDO
-- EDAD
-- SEXO
-- PESO
-- ALTURA
-- NIVEL_ACTIVIDAD_FISICA
-- OBJETIVO_NUTRICIONAL
-- CALORIAS_DIARIAS_OBJETIVO
-- PROTEINAS_DIARIAS_OBJETIVO
-- CARBOHIDRATOS_DIARIOS_OBJETIVO
-- GRASAS_DIARIAS_OBJETIVO
-- FECHA_CREACION
-- ULTIMA_ACTUALIZACION
+Submenu: enlaces a registrar alimento, registrar actividad y buscar receta.
 
-TABLA REGISTRO_COMIDAS:
-- ID_REGISTRO
-- ID_USUARIO
-- FECHA
-- HORA
-- ID_COMIDA (DESDE BASE DE DATOS DE ALIMENTOS)
-- CANTIDAD
-- CALORIAS
-- PROTEINAS
-- CARBOHIDRATOS
-- GRASAS
+Actualización de datos en tiempo real mediante cálculo de calorías consumidas y quemadas.
 
-TABLA REGISTRO_ACTIVIDADES:
-- ID_REGISTRO
-- ID_USUARIO
-- FECHA
-- HORA
-- TIPO_ACTIVIDAD
-- DURACION
-- INTENSIDAD
-- CALORIAS_QUEMADAS
+3.2 Registrar Actividad (RegistrarActividad.aspx)
+
+Formulario de registro con:
+
+Fecha/Hora.
+
+Actividad seleccionable desde DropDownList.
+
+Duración en minutos.
+
+Cálculo automático de calorías quemadas según tipo de actividad.
+
+Repeater para mostrar últimas actividades.
+
+Validaciones: RequiredFieldValidator para campos obligatorios.
+
+3.3 Registrar Alimento (RegistrarAlimento.aspx)
+
+Formulario de registro de comida:
+
+Selección de alimento (con búsqueda por nombre o código de barras).
+
+Cantidad en gramos.
+
+Fecha/Hora de consumo.
+
+Calcula automáticamente calorías y macronutrientes.
+
+Guarda los registros en RegistroComidas.
+
+Repeaters para mostrar historial y alimentos seleccionados.
+
+3.4 Recetas (Recetas.aspx)
+
+Búsqueda de recetas por nombre o ingrediente.
+
+Repeaters para:
+
+Listado de recetas encontradas.
+
+Detalle de alimentos de cada receta (cantidad, macros, calorías, código de barras).
+
+Posibilidad de registrar alimentos de la receta directamente en el consumo diario.
+
+Integración con APIs de recetas y alimentos para obtener información nutricional.
+
+3.5 Perfil de Usuario (UserProfile.aspx)
+
+Gestión de datos personales y objetivos nutricionales:
+
+Edad, sexo, peso, altura.
+
+Nivel de actividad física.
+
+Objetivo calórico y distribución de macronutrientes.
+
+La información se almacena en DetallesUsuarios.
+
+4. Lógica de Cálculo
+4.1 Calorías Diarias
+
+Se utiliza la Ecuación de Harris-Benedict modificada por nivel de actividad:
+
+TMB (hombres) = 66.47 + (13.75 * peso_kg) + (5 * altura_cm) - (6.76 * edad)
+TMB (mujeres) = 655.1 + (9.56 * peso_kg) + (1.85 * altura_cm) - (4.68 * edad)
+Calorías_diarias = TMB * factor_actividad
 
 
-APIs para la base de datos de alimentos:
+Factores de actividad:
 
-Open Food Facts 
-API	Base de datos colaborativa y abierta con millones de productos alimenticios. 
-Permite recuperar ingredientes, valores nutricionales (calor�as, macros, al�rgenos�) usando por ejemplo el c�digo de barras. 
+Sedentario: 1.2
 
-FoodData Central API (del USDA)	
-Fuente p�blica de composici�n de alimentos: datos de nutrientes de muchos alimentos gen�ricos y procesados. 
-Datos en dominio p�blico (CC0), lo que facilita su uso libre.
+Ligero: 1.375
 
-CalorieNinjas API	
-API gratuita con datos nutricionales (calor�as, macros) de muchos alimentos y recetas; �til si buscas algo sencillo y r�pido de integrar. 
-calorieninjas.com
+Moderado: 1.55
 
-Recipe API (API?Ninjas)	
-API para acceder a un cat�logo amplio de recetas, lo que puede servir como base para el m�dulo de �elaboraci�n de recetas� de tu proyecto. 
-api-ninjas.com
+Intenso: 1.725
+
+Muy intenso: 1.9
+
+4.2 Registro de Actividades
+
+Cálculo de calorías quemadas según MET de la actividad y duración.
+
+Se resta del total calórico diario para obtener balance energético.
+
+4.3 Registro de Alimentos
+
+Obtención de calorías y macros desde la base de datos local o APIs externas.
+
+Multiplicación por cantidad consumida en gramos.
+
+Actualización de los anillos de progreso en tiempo real.
+
+5. Base de Datos
+5.1 Tabla Usuarios
+
+ID_USUARIO, NOMBRE_USUARIO, CONTRASENA.
+
+5.2 Tabla DetallesUsuarios
+
+ID_USUARIO, NOMBRE, APELLIDO, EDAD, SEXO, PESO, ALTURA, NIVEL_ACTIVIDAD_FISICA, OBJETIVO_NUTRICIONAL, CALORIAS_DIARIAS_OBJETIVO, PROTEINAS_DIARIAS_OBJETIVO, CARBOHIDRATOS_DIARIOS_OBJETIVO, GRASAS_DIARIAS_OBJETIVO, FECHA_CREACION, ULTIMA_ACTUALIZACION.
+
+5.3 Tabla RegistroComidas
+
+ID_REGISTRO, ID_USUARIO, FECHA, HORA, ID_COMIDA, CANTIDAD, CALORIAS, PROTEINAS, CARBOHIDRATOS, GRASAS.
+
+5.4 Tabla RegistroActividades
+
+ID_REGISTRO, ID_USUARIO, FECHA, HORA, TIPO_ACTIVIDAD, DURACION, INTENSIDAD, CALORIAS_QUEMADAS.
+
+6. APIs Integradas
+API	Uso
+Open Food Facts	Información nutricional y código de barras de alimentos.
+FoodData Central	Datos de nutrientes de alimentos genéricos y procesados.
+CalorieNinjas	Datos de calorías y macronutrientes de alimentos y recetas.
+Recipe API	Consulta de recetas y composición nutricional.
+7. Flujo de Datos
+
+Usuario inicia sesión → datos cargados desde Usuarios y DetallesUsuarios.
+
+Registro de comida:
+
+Usuario selecciona alimento + cantidad.
+
+Backend calcula calorías/macros → guarda en RegistroComidas.
+
+Dashboard actualizado.
+
+Registro de actividad:
+
+Usuario ingresa tipo y duración.
+
+Backend calcula calorías quemadas → guarda en RegistroActividades.
+
+Dashboard actualizado.
+
+Consulta de recetas:
+
+Usuario busca receta → datos obtenidos de APIs.
+
+Alimentos de receta pueden registrarse directamente en RegistroComidas.
+
+Dashboard muestra progreso en anillos interactivos (SVG y JS).
+
+8. Estructura de Proyecto
+NutriGoals/
+│-- Site.Master
+│-- RegistrarActividad.aspx / .cs
+│-- RegistrarAlimento.aspx / .cs
+│-- Recetas.aspx / .cs
+│-- UserProfile.aspx / .cs
+│-- Home.aspx / .cs
+│-- Scripts/ (JS y librerías)
+│-- Content/ (CSS y assets)
+│-- App_Code/ (lógica compartida)
+│-- Web.config
 
 
+Cada .aspx corresponde a una página funcional.
 
+Cada .aspx.cs contiene la lógica de backend asociada a la página.
+
+MasterPage define navbar, footer interactivo y estructura de layout común.
