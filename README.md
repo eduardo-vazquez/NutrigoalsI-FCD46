@@ -1,146 +1,140 @@
-# IFCD46 – NutriGoals (Documentación Técnica)
+# IFCD46 – NutriGoals (Technical Documentation)
 
-## 1. Objetivo del Proyecto
-NutriGoals es una aplicación web para el seguimiento de hábitos alimenticios y actividad física. Permite registrar comidas y ejercicios, calcular calorías y macronutrientes automáticamente, consultar recetas y visualizar el progreso diario del usuario mediante gráficos interactivos.  
+## 1. Project Objective
+NutriGoals is a web application for tracking eating habits and physical activity. It allows users to log meals and exercises, automatically calculate calories and macronutrients, consult recipes, and visualize daily progress through interactive charts.
 
-El proyecto está desarrollado en **ASP.NET Web Forms** con **C#**, con base de datos SQL y consumo de APIs externas para alimentos y recetas.
+The project is developed in **ASP.NET Web Forms** with **C#**, using a SQL database.
 
 ---
 
-## 2. Arquitectura del Sistema
+## 2. System Architecture
 
-### 2.1 Tecnologías
+### 2.1 Technologies
 - **Frontend:** HTML, CSS, Bootstrap, Font Awesome, ASP.NET Web Forms.
-- **Backend:** .NET (C#), Code-behind por página (`.aspx.cs`).
-- **Base de datos:** SQL Server.
-- **APIs externas:** Open Food Facts, FoodData Central (USDA), CalorieNinjas, Recipe API.
-- **Autenticación:** OAuth 2.0 / OpenID Connect.
-- **Gestión de scripts y bundles:** ScriptManager y WebOpt bundling.
+- **Backend:** .NET (C#), Code-behind per page (`.aspx.cs`).
+- **Database:** SQL Server.
+- **External APIs:** Open Food Facts.
 
-### 2.2 Estructura general
-- **MasterPage (`Site.Master`)**: define navbar, footer con anillos de progreso y menú de acciones rápidas.
-- **ContentPages:** cada página concreta extiende MasterPage mediante `ContentPlaceHolderID="MainContent"`.
-- **Módulos principales:** registro de alimentos, registro de actividades, consulta de recetas, historial, perfil de usuario.
-- **Control de estados:** ViewState y PostBack para formularios, Repeaters para listados dinámicos.
+### 2.2 General Structure
+- **MasterPage (`Site.Master`)**: defines the navbar, footer with progress rings, and quick action menu.
+- **ContentPages:** each specific page extends the MasterPage using `ContentPlaceHolderID="MainContent"`.
+- **Main Modules:** food logging, activity logging, recipe lookup, history, user profile.
+- **State Control:** ViewState and PostBack for forms, Repeaters for dynamic listings.
 
 ---
 
-## 3. Páginas y Componentes
+## 3. Pages and Components
 
 ### 3.1 Dashboard / Home
-- Visualiza progreso diario mediante **SVG de anillos** (calorías, proteínas, carbohidratos, grasas).  
-- **Botón central**: acceso rápido a Home.  
-- **Submenu**: enlaces a registrar alimento, registrar actividad y buscar receta.  
-- Actualización de datos en **tiempo real** mediante cálculo de calorías consumidas y quemadas.  
+- Visualizes daily progress using **SVG rings** (calories, protein, carbohydrates, fats).
+- **Central Button**: quick access to Home.
+- **Submenu**: links to log food, log activity, and search recipes.
+- **Real-time** data update by calculating calories consumed and burned.
 
-### 3.2 Registrar Actividad (`RegistrarActividad.aspx`)
-- **Formulario de registro** con:
-  - Fecha/Hora.
-  - Actividad seleccionable desde DropDownList.
-  - Duración en minutos.
-- **Cálculo automático de calorías quemadas** según tipo de actividad.
-- **Repeater** para mostrar últimas actividades.  
-- Validaciones: RequiredFieldValidator para campos obligatorios.
+### 3.2 Log Activity (`RegistrarActividad.aspx`)
+- **Logging form** with:
+  - Date/Time.
+  - Activity selectable from a DropDownList.
+  - Duration in minutes.
+- **Automatic calculation of calories burned** based on activity type.
+- **Repeater** to show recent activities.
+- Validations: RequiredFieldValidator for mandatory fields.
 
-### 3.3 Registrar Alimento (`RegistrarAlimento.aspx`)  
-- **Formulario de registro de comida**:
-  - Selección de alimento (con búsqueda por nombre o código de barras).
-  - Cantidad en gramos.
-  - Fecha/Hora de consumo.
-- Calcula automáticamente calorías y macronutrientes.
-- Guarda los registros en `RegistroComidas`.
-- Repeaters para mostrar historial y alimentos seleccionados.
+### 3.3 Log Food (`RegistrarAlimento.aspx`)
+- **Meal logging form**:
+  - Food selection (with search by name or barcode).
+  - Quantity in grams.
+  - Date/Time of consumption.
+- Automatically calculates calories and macronutrients.
+- Saves logs in `RegistroComidas`.
+- Repeaters to show history and selected foods.
 
-### 3.4 Recetas (`Recetas.aspx`)  
-- **Búsqueda de recetas** por nombre o ingrediente.
-- **Repeaters** para:
-  - Listado de recetas encontradas.
-  - Detalle de alimentos de cada receta (cantidad, macros, calorías, código de barras).
-- Posibilidad de registrar alimentos de la receta directamente en el consumo diario.
-- Integración con APIs de recetas y alimentos para obtener información nutricional.  
+### 3.4 Recipes (`Recetas.aspx`)
+- **Recipe search** by name or ingredient.
+- **Repeaters** for:
+  - List of found recipes.
+  - Food details for each recipe (quantity, macros, calories, barcode).
+- Ability to log recipe foods directly into daily consumption.
+- Integration with recipe and food APIs for nutritional information.
 
-### 3.5 Perfil de Usuario (`UserProfile.aspx`)  
-- Gestión de datos personales y objetivos nutricionales:
-  - Edad, sexo, peso, altura.
-  - Nivel de actividad física.
-  - Objetivo calórico y distribución de macronutrientes.
-- La información se almacena en `DetallesUsuarios`.
-
----
-
-## 4. Lógica de Cálculo
-
-### 4.1 Calorías Diarias
-Se utiliza la **Ecuación de Harris-Benedict modificada por nivel de actividad**:
-
-TMB (hombres) = 66.47 + (13.75 * peso_kg) + (5 * altura_cm) - (6.76 * edad)
-TMB (mujeres) = 655.1 + (9.56 * peso_kg) + (1.85 * altura_cm) - (4.68 * edad)
-Calorías_diarias = TMB * factor_actividad
-
-
-- Factores de actividad:
-  - Sedentario: 1.2
-  - Ligero: 1.375
-  - Moderado: 1.55
-  - Intenso: 1.725
-  - Muy intenso: 1.9  
-
-### 4.2 Registro de Actividades
-- Cálculo de calorías quemadas según MET de la actividad y duración.
-- Se resta del total calórico diario para obtener balance energético.
-
-### 4.3 Registro de Alimentos
-- Obtención de calorías y macros desde la base de datos local o APIs externas.
-- Multiplicación por cantidad consumida en gramos.
-- Actualización de los anillos de progreso en tiempo real.
+### 3.5 User Profile (`UserProfile.aspx`)
+- Personal data and nutritional goals management:
+  - Age, sex, weight, height.
+  - Physical activity level.
+  - Caloric goal and macronutrient distribution.
+- Information is stored in `DetallesUsuarios`.
 
 ---
 
-## 5. Base de Datos
+## 4. Calculation Logic
 
-### 5.1 Tabla `Usuarios`
+### 4.1 Daily Calories
+The **Harris-Benedict Equation modified by activity level** is used:
+
+BMR (men) = 66.47 + (13.75 * weight_kg) + (5 * height_cm) - (6.76 * age)
+BMR (women) = 655.1 + (9.56 * weight_kg) + (1.85 * height_cm) - (4.68 * age)
+Daily_Calories = BMR * activity_factor
+
+- Activity factors:
+  - Sedentary: 1.2
+  - Light: 1.375
+  - Moderate: 1.55
+  - Intense: 1.725
+  - Very intense: 1.9
+
+### 4.2 Activity Logging
+- Calculation of calories burned based on activity MET and duration.
+- Subtracted from the daily caloric total to get energy balance.
+
+### 4.3 Food Logging
+- Retrieval of calories and macros from the local database or external APIs.
+- Multiplication by consumed quantity in grams.
+- Real-time progress ring update.
+
+---
+
+## 5. Database
+
+### 5.1 `Usuarios` Table
 - `ID_USUARIO`, `NOMBRE_USUARIO`, `CONTRASENA`.
 
-### 5.2 Tabla `DetallesUsuarios`
+### 5.2 `DetallesUsuarios` Table
 - `ID_USUARIO`, `NOMBRE`, `APELLIDO`, `EDAD`, `SEXO`, `PESO`, `ALTURA`, `NIVEL_ACTIVIDAD_FISICA`, `OBJETIVO_NUTRICIONAL`, `CALORIAS_DIARIAS_OBJETIVO`, `PROTEINAS_DIARIAS_OBJETIVO`, `CARBOHIDRATOS_DIARIOS_OBJETIVO`, `GRASAS_DIARIAS_OBJETIVO`, `FECHA_CREACION`, `ULTIMA_ACTUALIZACION`.
 
-### 5.3 Tabla `RegistroComidas`
+### 5.3 `RegistroComidas` Table
 - `ID_REGISTRO`, `ID_USUARIO`, `FECHA`, `HORA`, `ID_COMIDA`, `CANTIDAD`, `CALORIAS`, `PROTEINAS`, `CARBOHIDRATOS`, `GRASAS`.
 
-### 5.4 Tabla `RegistroActividades`
+### 5.4 `RegistroActividades` Table
 - `ID_REGISTRO`, `ID_USUARIO`, `FECHA`, `HORA`, `TIPO_ACTIVIDAD`, `DURACION`, `INTENSIDAD`, `CALORIAS_QUEMADAS`.
 
 ---
 
-## 6. APIs Integradas
+## 6. Integrated APIs
 
-| API | Uso |
+| API | Use |
 |-----|-----|
-| Open Food Facts | Información nutricional y código de barras de alimentos. |
-| FoodData Central | Datos de nutrientes de alimentos genéricos y procesados. |
-| CalorieNinjas | Datos de calorías y macronutrientes de alimentos y recetas. |
-| Recipe API | Consulta de recetas y composición nutricional. |
+| Open Food Facts | Nutritional information and food barcode. |
 
 ---
 
-## 7. Flujo de Datos
-1. Usuario inicia sesión → datos cargados desde `Usuarios` y `DetallesUsuarios`.
-2. Registro de comida:
-   - Usuario selecciona alimento + cantidad.
-   - Backend calcula calorías/macros → guarda en `RegistroComidas`.
-   - Dashboard actualizado.
-3. Registro de actividad:
-   - Usuario ingresa tipo y duración.
-   - Backend calcula calorías quemadas → guarda en `RegistroActividades`.
-   - Dashboard actualizado.
-4. Consulta de recetas:
-   - Usuario busca receta → datos obtenidos de APIs.
-   - Alimentos de receta pueden registrarse directamente en `RegistroComidas`.
-5. Dashboard muestra progreso en anillos interactivos (SVG y JS).
+## 7. Data Flow
+1. User logs in → data loaded from `Usuarios` and `DetallesUsuarios`.
+2. Food logging:
+   - User selects food + quantity.
+   - Backend calculates calories/macros → saves in `RegistroComidas`.
+   - Dashboard updated.
+3. Activity logging:
+   - User enters type and duration.
+   - Backend calculates calories burned → saves in `RegistroActividades`.
+   - Dashboard updated.
+4. Recipe lookup:
+   - User searches for a recipe.
+   - Recipe foods can be logged directly into `RegistroComidas`.
+5. Dashboard shows progress on interactive rings (SVG and JS).
 
 ---
 
-## 8. Estructura de Proyecto
+## 8. Project Structure
 NutriGoals/
 │-- Site.Master
 │-- RegistrarActividad.aspx / .cs
@@ -148,12 +142,11 @@ NutriGoals/
 │-- Recetas.aspx / .cs
 │-- UserProfile.aspx / .cs
 │-- Home.aspx / .cs
-│-- Scripts/ (JS y librerías)
-│-- Content/ (CSS y assets)
-│-- App_Code/ (lógica compartida)
+│-- Scripts/ (JS and libraries)
+│-- Content/ (CSS and assets)
+│-- App_Code/ (shared logic)
 │-- Web.config
 
-
-- Cada `.aspx` corresponde a una **página funcional**.  
-- Cada `.aspx.cs` contiene la **lógica de backend** asociada a la página.  
-- **MasterPage** define navbar, footer interactivo y estructura de layout común.
+- Each `.aspx` corresponds to a **functional page**.
+- Each `.aspx.cs` contains the **backend logic** associated with the page.
+- **MasterPage** defines navbar, interactive footer, and common layout structure.

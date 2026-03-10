@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 18.25, 12.625" name="NutriGoals">
+  <DataContextMoniker Name="/NutriGoalsDataContext" />
+  <nestedChildShapes>
+    <classShape Id="cebdaa13-0249-4ff5-bac7-9168fa828f4b" absoluteBounds="8, 2.875, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/NutriGoalsDataContext/ActividadFisica" />
+      <nestedChildShapes>
+        <elementListCompartment Id="276c7530-36dc-4bf3-9a1b-b3b2a1309a8d" absoluteBounds="8.015, 3.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3988955f-cd5e-44fd-b51b-6eb9250b2963" absoluteBounds="11.375, 3.125, 2, 1.3862939453124996">
+      <DataClassMoniker Name="/NutriGoalsDataContext/Ejercicio" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bb1311d2-0a70-425a-b642-685883eb19fc" absoluteBounds="11.39, 3.5850000000000009, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2f31421a-fbf7-456b-a5db-0fb5e35712ce" absoluteBounds="14, 8, 2, 1.3862939453124987">
+      <DataClassMoniker Name="/NutriGoalsDataContext/ListaIngrediente" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0c95f761-fb62-4e88-b18e-29d826376034" absoluteBounds="14.015, 8.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="33711221-785a-4871-8263-eb91c4c02527" absoluteBounds="11, 7.75, 2, 1.9631982421874987">
+      <DataClassMoniker Name="/NutriGoalsDataContext/Receta" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6dd8cf25-7895-44f3-8c55-373976283adc" absoluteBounds="11.015, 8.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(11.375 : 3.81814697265625); (10 : 3.81814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Ejercicio/Ejercicio_ActividadFisica" />
+      <nodes>
+        <classShapeMoniker Id="3988955f-cd5e-44fd-b51b-6eb9250b2963" />
+        <classShapeMoniker Id="cebdaa13-0249-4ff5-bac7-9168fa828f4b" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(13 : 8.69314697265625); (14 : 8.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Receta/Receta_ListaIngrediente" />
+      <nodes>
+        <classShapeMoniker Id="33711221-785a-4871-8263-eb91c4c02527" />
+        <classShapeMoniker Id="2f31421a-fbf7-456b-a5db-0fb5e35712ce" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="4eb94b2f-a039-4051-a181-cd8d78f82266" absoluteBounds="6.375, 6.25, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/NutriGoalsDataContext/Usuario" />
+      <nestedChildShapes>
+        <elementListCompartment Id="64fa4d92-c403-41bd-8fde-5d9a1a19bb2e" absoluteBounds="6.39, 6.71, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.1874995 : 6.25); (7.1874995 : 3.85659912109375); (8 : 3.85659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Usuario/Usuario_ActividadFisica" />
+      <nodes>
+        <classShapeMoniker Id="4eb94b2f-a039-4051-a181-cd8d78f82266" />
+        <classShapeMoniker Id="cebdaa13-0249-4ff5-bac7-9168fa828f4b" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="115cc2e4-6f2f-4276-8f1d-e5b9b0a5c976" absoluteBounds="3.625, 5.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/NutriGoalsDataContext/ObjetivosNutricionale" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0533aed4-2285-4498-b805-7f3943157f0a" absoluteBounds="3.6399999999999997, 6.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.375 : 7.11140055338542); (5.625 : 7.11140055338542)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Usuario/Usuario_ObjetivosNutricionale" />
+      <nodes>
+        <classShapeMoniker Id="4eb94b2f-a039-4051-a181-cd8d78f82266" />
+        <classShapeMoniker Id="115cc2e4-6f2f-4276-8f1d-e5b9b0a5c976" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="ac58fbfc-c8ef-4929-a685-501dbc6444d4" absoluteBounds="6.375, 10, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/NutriGoalsDataContext/UserMetrica" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c8bd89e4-dc53-4356-b16a-1302e92ffd24" absoluteBounds="6.3900000000000006, 10.46, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.375 : 8.40549967447917); (7.375 : 10)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Usuario/Usuario_UserMetrica" />
+      <nodes>
+        <classShapeMoniker Id="4eb94b2f-a039-4051-a181-cd8d78f82266" />
+        <classShapeMoniker Id="ac58fbfc-c8ef-4929-a685-501dbc6444d4" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="13c098fb-eef8-4897-a35c-8ed2cf48a9fd" absoluteBounds="16, 5, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/NutriGoalsDataContext/Alimento" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b680212d-d13e-4b3b-96d5-8639538385a8" absoluteBounds="16.015, 5.46, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(17.0000005 : 7.34780110677083); (17.0000005 : 8.69314697265625); (16 : 8.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Alimento/Alimento_ListaIngrediente" />
+      <nodes>
+        <classShapeMoniker Id="13c098fb-eef8-4897-a35c-8ed2cf48a9fd" />
+        <classShapeMoniker Id="2f31421a-fbf7-456b-a5db-0fb5e35712ce" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="24f0a0eb-3e00-4267-8429-0c95e7bf4b42" absoluteBounds="10.5, 5.5, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/NutriGoalsDataContext/AlimentoIngerido" />
+      <nestedChildShapes>
+        <elementListCompartment Id="99face8e-7bf9-4a36-8151-33968fb04961" absoluteBounds="10.515, 5.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(16 : 6.38544840494792); (12.5 : 6.38544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Alimento/Alimento_AlimentoIngerido" />
+      <nodes>
+        <classShapeMoniker Id="13c098fb-eef8-4897-a35c-8ed2cf48a9fd" />
+        <classShapeMoniker Id="24f0a0eb-3e00-4267-8429-0c95e7bf4b42" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.375 : 6.76044840494792); (10.5 : 6.76044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/NutriGoalsDataContext/Usuario/Usuario_AlimentoIngerido" />
+      <nodes>
+        <classShapeMoniker Id="4eb94b2f-a039-4051-a181-cd8d78f82266" />
+        <classShapeMoniker Id="24f0a0eb-3e00-4267-8429-0c95e7bf4b42" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

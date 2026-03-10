@@ -1,0 +1,407 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="NutriGoals.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - My ASP.NET Application</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- Font Awesome Free CDN -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+        crossorigin="anonymous"
+    />
+
+    <style>
+        body {
+            padding-top: 70px; /* altura del navbar */
+            padding-bottom: 100px; /* altura del footer */
+        }
+        footer {
+            color: white;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        footer p {
+            padding: 10px;
+            margin: 0;
+        }
+        .background-nutrigoals{
+            background-color: #384E3F;
+        }
+        .nutrigoals-btn{
+            background-color: #1D5A27;
+            color: white;
+            font-weight: bold;
+        }
+
+        .rings-container {
+            width: 350px;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #384E3F;
+            border-radius: 50% 50% 0 0;
+            margin: 0 auto;             /* centrado */
+            position: relative;
+            transform: scale(0.3);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+            pointer-events: auto;
+        }
+        .rings-container:hover {
+            transform: scale(1);
+        }
+        .rings-container:hover .submenu-container {
+            transform: scale(1);
+            top: -220px;
+            left: -400px;
+        }
+        .rings-container:hover .rings-legend {
+            transform: scale(1);
+        }
+
+        svg {
+            transform: rotate(-90deg);
+            position: absolute;
+        }
+
+        .center-text {
+            position: absolute;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .box {
+            width: 510px;
+            height:80px;
+            mask: radial-gradient(80px at 80px 0,#0000 98%,#000) -80px;
+            position: absolute;
+            bottom: 0;
+            z-index: -10;
+        }
+        .menu-btn-container {
+            position: relative;
+        }
+        .add-btn {
+            background-color: #ddd;
+            height: 80px;
+            width: 80px;
+            border-style: none;
+            color: #384E3F;
+            font-size: 30px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+        .submenu-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 800px;
+            height: 400px;
+            display: flex;
+            justify-content: space-between;
+            transform: scale(0);
+            transition: transform top left 1s ease;
+            pointer-events: auto;
+        }
+        .submenu-btn {
+            height: 30px;
+            border-radius: 50px;
+            color: white;
+            width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            pointer-events: auto;
+        }
+        .submenu-btn:nth-child(1) {
+            align-self: center;
+        }
+        .submenu-btn:nth-child(3) {
+            align-self: center;
+        }
+        .submenu-btn:hover,
+        .submenu-btn:focus {
+            background-color:  #26362C; /* mismo color */
+            color: white;
+            text-decoration: none;     /* elimina subrayado del <a> */
+        }
+
+        /* LEYENDAS */
+        .rings-legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: white;
+            pointer-events: auto;
+            position: absolute;
+            bottom: 0;
+            left: 80px;
+            transform: scale(0);
+            transition: transform top left 1s ease;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Colores sincronizados con los anillos */
+        .legend-dot.calorias { background-color: #ff3b30; }
+        .legend-dot.proteinas { background-color: #4cd964; }
+        .legend-dot.carbs { background-color: #007aff; }
+        .legend-dot.grasas { background-color: #ffcc00; }
+
+        .unit-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .input-unit {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-unit input {
+            padding-right: 2.25rem;
+        }
+
+        .input-unit .unit {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d; /* text-muted */
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .home-center-btn {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #1D5A27; /* mismo verde */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            z-index: 20;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .home-center-btn:hover {
+            background-color: #26362C;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+
+</head>
+<body class="min-vh-100">
+    <form runat="server"  class="d-flex flex-column min-vh-100">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+   
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <nav class="navbar navbar-expand-sm navbar-dark background-nutrigoals fixed-top">
+            <div class="container d-flex justify-content-between">
+                <a class="navbar-brand" runat="server" href="~/Home">NutriGoals</a>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" runat="server" href="~/UserProfile"><i class="fa-regular fa-user"></i></a></li>
+                </ul>
+                
+            </div>
+        </nav>
+
+        <div class="container body-content flex-grow-1 d-flex flex-column">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            
+            <footer class="footer fixed-bottom text-center">
+                <div class="rings-container">
+                    <!-- ANILLO 1 - CALORÍAS (exterior) -->
+                    <svg width="300" height="300">
+                        <circle cx="150" cy="150" r="140" stroke="#dddddd80" stroke-width="20" fill="none"></circle>
+                        <circle id="ringCalorias" cx="150" cy="150" r="140" 
+                            stroke="#ff3b30" stroke-width="20" fill="none"
+                            stroke-linecap="round" stroke-dasharray="880" stroke-dashoffset="880"
+                            style="transition: stroke-dashoffset 1s ease;" />
+                    </svg>
+
+                    <!-- ANILLO 2 - PROTEÍNAS -->
+                    <svg width="260" height="260">
+                        <circle cx="130" cy="130" r="110" stroke="#dddddd80" stroke-width="18" fill="none"></circle>
+                        <circle id="ringProteinas" cx="130" cy="130" r="110" 
+                            stroke="#4cd964" stroke-width="18" fill="none"
+                            stroke-linecap="round" stroke-dasharray="690" stroke-dashoffset="690"
+                            style="transition: stroke-dashoffset 1s ease;" />
+                    </svg>
+
+                    <!-- ANILLO 3 - CARBOHIDRATOS -->
+                    <svg width="220" height="220">
+                        <circle cx="110" cy="110" r="80" stroke="#dddddd80" stroke-width="16" fill="none"></circle>
+                        <circle id="ringCarbs" cx="110" cy="110" r="80" 
+                            stroke="#007aff" stroke-width="16" fill="none"
+                            stroke-linecap="round" stroke-dasharray="502" stroke-dashoffset="502"
+                            style="transition: stroke-dashoffset 1s ease;" />
+                    </svg>
+
+                    <!-- ANILLO 4 - GRASAS (interior) -->
+                    <svg width="180" height="180">
+                        <circle cx="90" cy="90" r="55" stroke="#dddddd80" stroke-width="14" fill="none"></circle>
+                        <circle id="ringGrasas" cx="90" cy="90" r="55" 
+                            stroke="#ffcc00" stroke-width="14" fill="none"
+                            stroke-linecap="round" stroke-dasharray="345" stroke-dashoffset="345"
+                            style="transition: stroke-dashoffset 1s ease;" />
+                    </svg>
+                    <a href="<%= ResolveUrl("~/Home") %>" class="home-center-btn">
+                        <i class="fa-solid fa-house"></i>
+                    </a>
+                    <div class="menu-btn-container">
+                        <%--<button class="add-btn">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>--%>
+
+                        <div class="submenu-container">
+                            <asp:HyperLink
+                                runat="server"
+                                NavigateUrl="~/RegistrarAlimento"
+                                CssClass="btn submenu-btn background-nutrigoals"
+                            >
+                                <i class="fa-solid fa-apple-whole"></i>
+                                Registrar Alimento
+                            </asp:HyperLink>
+
+                            <asp:HyperLink
+                                runat="server"
+                                NavigateUrl="~/RegistrarActividad"
+                                CssClass="btn submenu-btn background-nutrigoals"
+                            >
+                                <i class="fa-solid fa-person-walking"></i>
+                                Registrar Actividad
+                            </asp:HyperLink>
+
+                            <asp:HyperLink
+                                runat="server"
+                                NavigateUrl="~/Recetas"
+                                CssClass="btn submenu-btn background-nutrigoals"
+                            >
+                                <i class="fa-solid fa-utensils"></i>
+                                Buscar Receta
+                            </asp:HyperLink>
+                        </div>         
+                    </div>
+
+                    
+                    <div class="box background-nutrigoals">
+                        <div class="rings-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot calorias"></span>
+                                <span>Calorías</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot proteinas"></span>
+                                <span>Proteínas</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot carbs"></span>
+                                <span>Carbohidratos</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot grasas"></span>
+                                <span>Grasas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="background-nutrigoals footer-base">
+                    <p>&copy; <%: DateTime.Now.Year %> - NutriGoals</p>
+                </div>           
+            </footer>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+    <script>
+
+        window.ringsData = {
+                calorias: <%= PorcCalorias %>,
+                proteinas: <%= PorcProteinas %>,
+                carbohidratos: <%= PorcCarbohidratos  %>,
+                grasas: <%= PorcGrasas %>
+        };
+
+        function setRingProgress(circleId, percent) {
+            const circle = document.getElementById(circleId);
+            if (!circle) return;
+
+            const r = circle.getAttribute("r");
+            const circumference = 2 * Math.PI * r;
+            const offset = circumference - (percent / 100) * circumference;
+
+            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        if (window.ringsData) {
+            setRingProgress("ringCalorias", window.ringsData.calorias);
+            setRingProgress("ringProteinas", window.ringsData.proteinas);
+            setRingProgress("ringCarbs", window.ringsData.carbohidratos);
+            setRingProgress("ringGrasas", window.ringsData.grasas);
+        }
+    </script>
+</body>
+</html>

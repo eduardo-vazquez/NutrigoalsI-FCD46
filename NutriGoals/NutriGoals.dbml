@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="NutriGoals" Class="NutriGoalsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.ActividadFisica" Member="ActividadFisicas">
+    <Type Name="ActividadFisica">
+      <Column Name="IdActFisica" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FKIdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FKIdEjercicio" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FechaHora" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TiempoMinutos" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Column Name="CaloriasTotales" Type="System.Decimal" DbType="Decimal(4,0) NOT NULL" CanBeNull="false" />
+      <Association Name="Ejercicio_ActividadFisica" Member="Ejercicio" ThisKey="FKIdEjercicio" OtherKey="IdEjercicio" Type="Ejercicio" IsForeignKey="true" />
+      <Association Name="Usuario_ActividadFisica" Member="Usuario" ThisKey="FKIdUsuario" OtherKey="IdUsuario" Type="Usuario" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Ejercicio" Member="Ejercicios">
+    <Type Name="Ejercicio">
+      <Column Name="IdEjercicio" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="CaloriasPorMinuto" Type="System.Decimal" DbType="Decimal(4,2) NOT NULL" CanBeNull="false" />
+      <Association Name="Ejercicio_ActividadFisica" Member="ActividadFisicas" ThisKey="IdEjercicio" OtherKey="FKIdEjercicio" Type="ActividadFisica" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ListaIngredientes" Member="ListaIngredientes">
+    <Type Name="ListaIngrediente">
+      <Column Name="FKIdReceta" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FKIdAlimento" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CantidadGRMS" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Association Name="Receta_ListaIngrediente" Member="Receta" ThisKey="FKIdReceta" OtherKey="IdReceta" Type="Receta" IsForeignKey="true" />
+      <Association Name="Alimento_ListaIngrediente" Member="Alimento" ThisKey="FKIdAlimento" OtherKey="IdAlimento" Type="Alimento" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Recetas" Member="Recetas">
+    <Type Name="Receta">
+      <Column Name="IdReceta" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Calorias100" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Proteinas100" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Carbohidratos100" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Grasas100" Type="System.Decimal" DbType="Decimal(3,0) NOT NULL" CanBeNull="false" />
+      <Association Name="Receta_ListaIngrediente" Member="ListaIngredientes" ThisKey="IdReceta" OtherKey="FKIdReceta" Type="ListaIngrediente" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Usuario" Member="Usuarios">
+    <Type Name="Usuario">
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Apellido1" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Apellido2" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="PasswordHash" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="PasswordSalt" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="Usuario_ActividadFisica" Member="ActividadFisicas" ThisKey="IdUsuario" OtherKey="FKIdUsuario" Type="ActividadFisica" />
+      <Association Name="Usuario_ObjetivosNutricionale" Member="ObjetivosNutricionales" ThisKey="IdUsuario" OtherKey="FKIdUsuario" Type="ObjetivosNutricionale" />
+      <Association Name="Usuario_UserMetrica" Member="UserMetricas" ThisKey="IdUsuario" OtherKey="FKIdUsuario" Type="UserMetrica" />
+      <Association Name="Usuario_AlimentoIngerido" Member="AlimentoIngeridos" ThisKey="IdUsuario" OtherKey="FKIdUsuario" Type="AlimentoIngerido" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ObjetivosNutricionales" Member="ObjetivosNutricionales">
+    <Type Name="ObjetivosNutricionale">
+      <Column Name="IdObjetivoNutricional" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FKIdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FechaDeEstablecimiento" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CaloriasDiaObjetivo" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ProteinasDiaObjetivo" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="CarbohidratosDiaObjetivo" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="GrasasDiaObjetivo" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Objetivo" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="Usuario_ObjetivosNutricionale" Member="Usuario" ThisKey="FKIdUsuario" OtherKey="IdUsuario" Type="Usuario" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserMetrica" Member="UserMetricas">
+    <Type Name="UserMetrica">
+      <Column Name="IdMetrica" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FKIdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FechaMedicion" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AlturaCM" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PesoKG" Type="System.Decimal" DbType="Decimal(5,2)" CanBeNull="true" />
+      <Column Name="FechaNacimiento" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Sexo" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="NivelDeActividad" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Usuario_UserMetrica" Member="Usuario" ThisKey="FKIdUsuario" OtherKey="IdUsuario" Type="Usuario" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Alimento" Member="Alimentos">
+    <Type Name="Alimento">
+      <Column Name="IdAlimento" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Calorias100" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Proteinas100" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Carbohidratos100" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Grasas100" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="CodigoBarras" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ImagenUrl" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Association Name="Alimento_ListaIngrediente" Member="ListaIngredientes" ThisKey="IdAlimento" OtherKey="FKIdAlimento" Type="ListaIngrediente" />
+      <Association Name="Alimento_AlimentoIngerido" Member="AlimentoIngeridos" ThisKey="IdAlimento" OtherKey="FKIdAlimento" Type="AlimentoIngerido" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AlimentoIngerido" Member="AlimentoIngeridos">
+    <Type Name="AlimentoIngerido">
+      <Column Name="IdAlimentoIngerido" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FKIdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FKIdAlimento" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FechaHoraConsumo" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CantidadGramos" Type="System.Decimal" DbType="Decimal(8,0) NOT NULL" CanBeNull="false" />
+      <Association Name="Alimento_AlimentoIngerido" Member="Alimento" ThisKey="FKIdAlimento" OtherKey="IdAlimento" Type="Alimento" IsForeignKey="true" />
+      <Association Name="Usuario_AlimentoIngerido" Member="Usuario" ThisKey="FKIdUsuario" OtherKey="IdUsuario" Type="Usuario" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
